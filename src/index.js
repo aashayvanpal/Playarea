@@ -1,12 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+//html - <script ="./js/react.development.js"></script>
 
-ReactDOM.render(<App />, document.getElementById('root'));
+// es2015 (es6) module loaders - React, Angular
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+import React from 'react'
+import ReactDOM from 'react-dom'
+import configStore from './redux/configureStore/store.js'
+import { Provider } from 'react-redux'
+
+
+import App from './App.js'
+
+const store = configStore()
+
+
+store.subscribe(() => {
+    console.log(store.getState())
+
+}
+)
+export default store
+
+const ele = (
+    <Provider store={store}>
+        <App />
+    </Provider>
+)
+ReactDOM.render(ele, document.getElementById('root'));
+
+
+// common module loaders - node, express
