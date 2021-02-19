@@ -8,7 +8,7 @@ class Footer extends React.Component {
     render() {
         return (
             <div>
-                Footer page.0
+                Footer page..
                 <footer className="footer">
                     <div style={{
                         "display": "flex"
