@@ -1,115 +1,34 @@
 import React from 'react'
-import axios from 'axios'
-import './App.css'
+import Posts from './components/Posts.js'
+import Header from './components/Header.js'
+import Email from './components/Email.js'
+import Home from './components/Home.js'
+import Model from './components/Model.js'
+import NotFoundPage from './components/NotFoundPage.js'
+import { Switch, BrowserRouter, Link, Route } from 'react-router-dom'
 
-export default class App extends React.Component {
+export default function App() {
+  return (
+    < div className="app" >
+      <h2>Play area App </h2>
+      <BrowserRouter>
+        <Link to="/">Home</Link>
+        <Link to="/posts">Posts</Link>
+        <Link to="/header">Header</Link>
+        <Link to="/emails">Email</Link>
+        <Link to="/model">model back</Link>
+          <Email />
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/posts" component={Posts} />
+          <Route exact path="/header" component={Header} />
+          <Route path="/emails" component={Email} />
+          <Route path="/model" component={Model} />
+          <Route path="*" component={NotFoundPage} />
+        </Switch>
 
-  state = {
-    title: '',
-    body: '',
-    posts: []
-  }
+      </BrowserRouter>
+    </div >
+  )
 
-  handleChange = ({ target }) => {
-    const { name, value } = target
-    this.setState({ [name]: value })
-  }
-
-  getBlogData = () => {
-    axios.get('/api')
-      .then((response) => {
-        this.setState({
-          posts: response.data
-        })
-        console.log("data has been recieved")
-        console.log(response.data)
-
-      })
-      .catch(() => {
-        alert('could not get the data!')
-      })
-  }
-
-  submit = (event) => {
-    event.preventDefault()
-
-    const payload = {
-      title: this.state.title,
-      body: this.state.body
-    }
-
-    axios({
-      url: '/api/save',
-      data: payload,
-      method: 'POST'
-    })
-      .then(() => {
-        console.log("data has been sent to the server")
-        this.resetUserInputs()
-        this.getBlogData()
-
-      })
-      .catch(() => {
-        console.log("error in sending the data")
-
-      })
-
-  }
-
-  resetUserInputs = () => {
-    this.setState({
-      title: '',
-      body: ''
-    })
-  }
-
-  displayBlogPosts(posts) {
-
-    if (!posts.length) return null
-
-    return posts.map((post, index) => (
-      <div key={index} className="blog-post_display">
-        <h3>{index + 1}. {post.title}</h3>
-        <p>{post.body}</p>
-      </div>
-    ))
-  }
-
-  componentDidMount() {
-    this.getBlogData()
-  }
-
-  render() {
-    // console.log('state:', this.state)
-    return (
-      <div className="app">
-        <h2>This is a MERN deployed App </h2>
-        <form onSubmit={this.submit}>
-          <div className="form-input">
-            <input
-              type="text"
-              name="title"
-              value={this.state.title}
-              placeholder="title"
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="form-input">
-            <textarea
-              name="body"
-              placeholder="body"
-              cols="30" rows="10"
-              value={this.state.body}
-              onChange={this.handleChange}>
-
-            </textarea>
-          </div>
-          <button>Submit</button>
-        </form>
-        <div className="blog-post">
-          {this.displayBlogPosts(this.state.posts)}
-        </div>
-      </div>
-    )
-  }
 }
